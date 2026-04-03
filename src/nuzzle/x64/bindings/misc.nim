@@ -1,0 +1,48 @@
+## Miscellaneous syscalls 
+##
+## Copyright (C) 2026 Trayambak Rai (xtrayambak@disroot.org)
+import pkg/nuzzle/flags, pkg/nuzzle/x64/[dispatch], pkg/nuzzle/x64/bindings/err
+
+when SubstitutingLibc:
+  {.push exportc.}
+
+{.push cdecl.}
+
+proc pause*(): int32 =
+  let ret = (int32) sc0(SYS_pause)
+  if ret < 0:
+    errno = -ret
+    return -1'i32
+
+  ret
+
+proc getrandom*(buffer: cstring | ptr char, size: uint64, flags: uint32): uint64 =
+  let ret = (int32) sc3(SYS_getrandom, cast[uint64](buffer), size, cast[uint64](flags))
+  if ret < 0:
+    errno = -ret
+    return -1'i32
+
+  ret
+
+proc getuid*(): uint32 =
+  (uint32) sc0(SYS_getuid)
+
+proc geteuid*(): uint32 =
+  (uint32) sc0(SYS_geteuid)
+
+proc getgid*(): uint32 =
+  (uint32) sc0(SYS_getgid)
+
+proc getegid*(): uint32 =
+  (uint32) sc0(SYS_getegid)
+
+proc setuid*(uid: uint32): int32 =
+  HandleErrno (int32) sc1(SYS_setuid, cast[uint64](uid))
+
+proc setgid*(gid: uint32): int32 =
+  HandleErrno (int32) sc1(SYS_getgid, cast[uint64](gid))
+
+proc setegid*(egid: uint32): int32 =
+  HandleErrno (int32) sc1(SYS_getegid, cast[uint64](egid))
+
+{.pop.}

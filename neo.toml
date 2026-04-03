@@ -1,0 +1,13 @@
+[package]
+name = "nuzzle"
+description = "Pure-Nim POSIX syscall wrappers"
+version = "0.1.0"
+license = "BSD-3-Clause"
+kind = "Library"
+backend = "C"
+binaries = []
+
+[toolchain]
+version = "2.2.0"
+
+[dependencies]
