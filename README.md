@@ -44,3 +44,4 @@ Linux has hundreds of syscalls, so it'll obviously take some time to bind all of
 - [X] `getgid` / `getegid`
 - [X] `setuid`
 - [X] `setgid` / `setegid`
+- [X] `arch_prctl`

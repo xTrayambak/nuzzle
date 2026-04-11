@@ -1,7 +1,7 @@
 ## Process management syscall bindings
 ##
 ## Copyright (C) 2026 Trayambak Rai (xtrayambak@disroot.org)
-import pkg/nuzzle/flags, pkg/nuzzle/x64/bindings/err
+import pkg/nuzzle/flags, pkg/nuzzle/x64/[dispatch], pkg/nuzzle/x64/bindings/err
 
 const
   # ISO C99 signals.

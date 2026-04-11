@@ -3,6 +3,14 @@
 ## Copyright (C) 2026 Trayambak Rai (xtrayambak@disroot.org)
 import pkg/nuzzle/flags, pkg/nuzzle/x64/[dispatch], pkg/nuzzle/x64/bindings/err
 
+const
+  ARCH_SET_GS* = 0x1001'i32
+  ARCH_SET_FS* = 0x1002'i32
+  ARCH_GET_FS* = 0x1003'i32
+  ARCH_GET_GS* = 0x1004'i32
+  ARCH_SET_CPUID* = 0x1011'i32
+  ARCH_GET_CPUID* = 0x1012'i32
+
 when SubstitutingLibc:
   {.push exportc.}
 
@@ -44,5 +52,8 @@ proc setgid*(gid: uint32): int32 =
 
 proc setegid*(egid: uint32): int32 =
   HandleErrno (int32) sc1(SYS_getegid, cast[uint64](egid))
+
+proc arch_prctl*(op: int32, address: pointer): int32 =
+  HandleErrno (int32) sc2(SYS_arch_prctl, cast[uint64](op), cast[uint64](address))
 
 {.pop.}
