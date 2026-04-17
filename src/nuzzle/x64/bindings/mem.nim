@@ -7,7 +7,18 @@ import pkg/nuzzle/flags,
        pkg/nuzzle/x64/dispatch
 #!fmt: on
 
-const MAP_FAILED* = cast[pointer](-1)
+const
+  MAP_FAILED* = cast[pointer](-1)
+
+  PROT_READ* = 1'i32
+  PROT_WRITE* = 2'i32
+  PROT_EXEC* = 4'i32
+  PROT_NONE* = 0'i32
+
+  MAP_SHARED* = 1'i32
+  MAP_PRIVATE* = 2'i32
+  MAP_FIXED* = 16'i32
+  MAP_ANONYMOUS* = 32'i32
 
 when SubstitutingLibc:
   {.push exportc.}
@@ -16,9 +27,22 @@ when SubstitutingLibc:
 proc brk*(address: pointer): int32 =
   HandleErrno (int32) sc1(SYS_brk, cast[uint64](address))
 
-proc mmap*(address: pointer, length: uint64, prot: int32, flags: int32): pointer =
-  let ret = (uint64) sc4(
-    SYS_mmap, cast[uint64](address), length, cast[uint64](prot), cast[uint64](flags)
+proc mmap*(
+    address: pointer,
+    length: uint64,
+    prot: int32,
+    flags: int32,
+    fd: int32,
+    offset: uint64,
+): pointer =
+  let ret = (uint64) sc6(
+    SYS_mmap,
+    cast[uint64](address),
+    length,
+    cast[uint64](prot),
+    cast[uint64](flags),
+    cast[uint64](fd),
+    cast[uint64](offset),
   )
   if ret < 0:
     errno = -cast[int32](ret)
