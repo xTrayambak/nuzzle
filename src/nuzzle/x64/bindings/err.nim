@@ -20,7 +20,7 @@ func strerror*(value: int32): cstring =
   elif cast[int32](StringErrors.len) < value or value < 0:
     cstring("Unknown error " & $value)
   else:
-    cstring(StringErrors[value])
+    cstring(StringErrors[value - 1])
 
 {.pop.}
 
