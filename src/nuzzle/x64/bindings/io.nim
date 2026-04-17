@@ -49,6 +49,11 @@ proc write*(fd: int32, buffer: cstring | ptr char, count: uint64): int64 =
 
   ret
 
+proc read*(fd: int32, buf: ptr char | cstring, count: Offset): int64 =
+  (int32) HandleErrno (int32) sc3(
+    SYS_read, cast[uint64](fd), cast[uint64](buf), cast[uint64](count)
+  )
+
 proc link*(oldpath: cstring | ptr char, newpath: cstring | ptr char): int32 =
   HandleErrno (int32) sc2(SYS_link, cast[uint64](oldpath), cast[uint64](newpath))
 
