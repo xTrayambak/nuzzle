@@ -5,7 +5,7 @@
 #!fmt: off
 import pkg/nuzzle/flags,
        pkg/nuzzle/x64/[dispatch],
-       pkg/nuzzle/x64/bindings/err
+       pkg/nuzzle/x64/bindings/[err, types]
 #!fmt: on
 
 const
@@ -22,7 +22,7 @@ when SubstitutingLibc:
 
 {.push cdecl, sideEffect.}
 
-proc open*(path: cstring | ptr char, flags: int32, mode: uint32 = 0'u32): int32 =
+proc open*(path: cstring | ptr char, flags: int32, mode: Mode = Mode(0)): int32 =
   HandleErrno (int32) sc3(
     SYS_open, cast[uint64](path), cast[uint64](flags), cast[uint64](mode)
   )
@@ -31,7 +31,7 @@ proc close*(fd: int32): int32 =
   HandleErrno (int32) sc1(SYS_close, cast[uint64](fd))
 
 proc openat*(
-    dirfd: int32, path: cstring | ptr char, flags: int32, mode: uint32 = 0'u32
+    dirfd: int32, path: cstring | ptr char, flags: int32, mode: Mode = Mode(0)
 ): int32 =
   HandleErrno (int32) sc4(
     SYS_openat,
@@ -62,6 +62,12 @@ proc dup3*(oldfd: int32, newfd: int32, flags: int32): int32 =
   HandleErrno (int32) sc3(
     SYS_dup3, cast[uint64](oldfd), cast[uint64](newfd), cast[uint64](flags)
   )
+
+proc stat*(path: cstring, statbuf: ptr Stat): int32 =
+  HandleErrno (int32) sc2(SYS_stat, cast[uint64](path), cast[uint64](statbuf))
+
+proc fstat*(fd: int32, statbuf: ptr Stat): int32 =
+  HandleErrno (int32) sc2(SYS_fstat, cast[uint64](fd), cast[uint64](statbuf))
 
 {.pop.}
 

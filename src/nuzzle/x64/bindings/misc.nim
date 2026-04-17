@@ -1,7 +1,7 @@
 ## Miscellaneous syscalls 
 ##
 ## Copyright (C) 2026 Trayambak Rai (xtrayambak@disroot.org)
-import pkg/nuzzle/flags, pkg/nuzzle/x64/[dispatch], pkg/nuzzle/x64/bindings/err
+import pkg/nuzzle/flags, pkg/nuzzle/x64/[dispatch], pkg/nuzzle/x64/bindings/[types, err]
 
 const
   ARCH_SET_GS* = 0x1001'i32
@@ -32,25 +32,25 @@ proc getrandom*(buffer: cstring | ptr char, size: uint64, flags: uint32): uint64
 
   ret
 
-proc getuid*(): uint32 =
-  (uint32) sc0(SYS_getuid)
+proc getuid*(): UID =
+  (UID) sc0(SYS_getuid)
 
-proc geteuid*(): uint32 =
-  (uint32) sc0(SYS_geteuid)
+proc geteuid*(): UID =
+  (UID) sc0(SYS_geteuid)
 
-proc getgid*(): uint32 =
-  (uint32) sc0(SYS_getgid)
+proc getgid*(): GID =
+  (GID) sc0(SYS_getgid)
 
-proc getegid*(): uint32 =
-  (uint32) sc0(SYS_getegid)
+proc getegid*(): GID =
+  (GID) sc0(SYS_getegid)
 
-proc setuid*(uid: uint32): int32 =
+proc setuid*(uid: UID): int32 =
   HandleErrno (int32) sc1(SYS_setuid, cast[uint64](uid))
 
-proc setgid*(gid: uint32): int32 =
+proc setgid*(gid: GID): int32 =
   HandleErrno (int32) sc1(SYS_getgid, cast[uint64](gid))
 
-proc setegid*(egid: uint32): int32 =
+proc setegid*(egid: GID): int32 =
   HandleErrno (int32) sc1(SYS_getegid, cast[uint64](egid))
 
 proc arch_prctl*(op: int32, address: pointer): int32 =

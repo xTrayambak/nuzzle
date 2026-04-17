@@ -19,6 +19,7 @@ Linux has hundreds of syscalls, so it'll obviously take some time to bind all of
 - [X] `link`
 - [X] `ioctl`
 - [X] `dup` / `dup2` / `dup3`
+- [X] `stat` / `fstat`
 
 ## memory management
 - [X] `mmap`
