@@ -52,8 +52,19 @@ proc sc5*(n: syscalls.Syscall, a1, a2, a3, a4, a5: uint64): int64 =
   asm """
     movq %5, %%r10
     movq %6, %%r8
+    syscall
     :"=a"(`result`)
     :"a"(`n`), "D"(`a1`), "S"(`a2`), "d"(`a3`), "r"(`a4`), "v"(`a5`)
+  """
+
+proc sc6*(n: syscalls.Syscall, a1, a2, a3, a4, a5, a6: uint64): int64 =
+  asm """
+    movq %5, %%r10
+    movq %6, %%r8
+    movq %7, %%r9
+    syscall
+    :"=a"(`result`)
+    :"a"(`n`), "D"(`a1`), "S"(`a2`), "d"(`a3`), "r"(`a4`), "v"(`a5`), "r"(`a6`)
   """
 
 {.pop.}
